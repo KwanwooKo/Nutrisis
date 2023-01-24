@@ -6,6 +6,7 @@ import './home.dart';
 import './calendar.dart';
 import './addNew.dart';
 import './settings.dart';
+import './nutritionInfo.dart';
 
 void main() {
   runApp(
@@ -28,6 +29,8 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   var tap = 0;
+
+
   Map<DateTime, Map<String, double>> history = {
     DateTime(2023, 1, 23) : {
       "탄수화물": 12,
