@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 // import './main.dart';
 
 class CaloriePieChart extends StatefulWidget {
-  CaloriePieChart({Key? key, this.calorieDataMap}) : super(key: key);
+  CaloriePieChart({Key? key, required this.calorieDataMap}) : super(key: key);
+  Map<String, double> calorieDataMap;
 
-  var calorieDataMap;
   @override
   State<CaloriePieChart> createState() => _CaloriePieChart();
 }
