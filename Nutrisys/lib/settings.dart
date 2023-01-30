@@ -8,7 +8,9 @@ class Settings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Settings'),),
+      appBar: AppBar(
+        title: const Text('Settings'),
+      ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
@@ -16,17 +18,23 @@ class Settings extends StatelessWidget {
           SizedBox(
             child: Text('이름    ${context.read<Profile>().name}'),
           ),
-          SizedBox(child: Text('나이    ${context.read<Profile>().age}세'),),
-          SizedBox(child: Text('성별    ${context.read<Profile>().gender}'),),
-          SizedBox(child: Text('키    ${context.read<Profile>().height}cm'),),
-          SizedBox(child: Text('몸무게    ${context.read<Profile>().weight}kg'),),
-          SizedBox(child: Text('목표    열량    탄수화물    단백질    지방'),)
-
+          SizedBox(
+            child: Text('나이    ${context.read<Profile>().age}세'),
+          ),
+          SizedBox(
+            child: Text('성별    ${context.read<Profile>().gender}'),
+          ),
+          SizedBox(
+            child: Text('키    ${context.read<Profile>().height}cm'),
+          ),
+          SizedBox(
+            child: Text('몸무게    ${context.read<Profile>().weight}kg'),
+          ),
+          SizedBox(
+            child: Text('목표    열량    탄수화물    단백질    지방'),
+          )
         ],
       ),
     );
   }
 }
-
-
-
