@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import './profile.dart';
 
-Profile userProfile = Profile();
 
 class ProfileForm extends StatefulWidget {
   const ProfileForm({super.key});
@@ -12,6 +10,7 @@ class ProfileForm extends StatefulWidget {
     return ProfileFormState();
   }
 }
+
 
 class ProfileFormState extends State<ProfileForm> {
   final _formKey = GlobalKey<FormState>();
@@ -30,6 +29,7 @@ class ProfileFormState extends State<ProfileForm> {
               label: '이름',
               onSaved: (val) {},
               validator: (val) {
+                val = val.toString();
                 if (val.isEmpty) {
                   return '입력해주세요';
                 }
@@ -42,6 +42,7 @@ class ProfileFormState extends State<ProfileForm> {
               label: '나이',
               onSaved: (val) {},
               validator: (val) {
+                val = val.toString();
                 if (val.isEmpty || isInt(val) == false) {
                   return '숫자를 입력해주세요';
                 }
@@ -50,12 +51,14 @@ class ProfileFormState extends State<ProfileForm> {
               },
             ),
 
+
             renderDropdownBox(),
 
             renderTextFormField(
               label: '키',
               onSaved: (val) {},
               validator: (val) {
+                val = val.toString();
                 if (val.isEmpty || isInt(val) == false) {
                   return '숫자를 입력해주세요';
                 }
@@ -69,6 +72,7 @@ class ProfileFormState extends State<ProfileForm> {
               label: '몸무게',
               onSaved: (val) {},
               validator: (val) {
+                val = val.toString();
                 if (val.isEmpty || isInt(val) == false) {
                   return '숫자를 입력해주세요';
                 }
@@ -82,6 +86,7 @@ class ProfileFormState extends State<ProfileForm> {
               label: '하루 목표 칼로리 (kcal)',
               onSaved: (val) {},
               validator: (val) {
+                val = val.toString();
                 if (val.isEmpty || isInt(val) == false) {
                   return '숫자를 입력해주세요';
                 }
@@ -104,12 +109,14 @@ class ProfileFormState extends State<ProfileForm> {
   }) {
     // assert(onSaved != null);
     // assert(validator != null);
+    // testFunction();
 
     return Container(
       padding: EdgeInsets.only(top: 20, bottom: 10, right: 10, left: 10),
       child: Column(
         children: [
           Row(
+
             children: [
               Text(
                 label,
@@ -125,27 +132,35 @@ class ProfileFormState extends State<ProfileForm> {
             validator: validator,
           ),
         ],
-      ),
-    );
+      ),);
   }
 
   renderSubmitBtn() {
-    return ElevatedButton(
-      //raisedButton이 사장됐나보다...
+    return ElevatedButton( //raisedButton이 사장됐나보다...
       // color: Colors.blue,
       onPressed: () async {
-        if (_formKey.currentState!.validate()) {
-          //! 추가하니까 에러 잡혔다.
+
+        final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+        var testAge = prefs.getString('age');
+        var testName = prefs.getString('name');
+        var testGender = prefs.getString('gender');
+
+        print(testAge);
+        print(testName);
+        print(testGender);
+
+        if (_formKey.currentState!.validate()) { //! 추가하니까 에러 잡혔다.
           //validation이 성공하면 true가 리턴된다.
 
           //일단 저장
-          userProfile.updateProfile(
-              name: user.name,
+          updateProfile(name: user.name,
               age: user.age,
               height: user.height,
               weight: user.weight,
               gender: user.gender,
-              cal: user.cal);
+              cal: user.cal
+          );
 
           const snackBar = SnackBar(
             content: Text('저장 완료!'),
@@ -176,6 +191,7 @@ class ProfileFormState extends State<ProfileForm> {
       child: Column(
         children: [
           Row(
+
             children: [
               Text(
                 "성별",
@@ -188,8 +204,8 @@ class ProfileFormState extends State<ProfileForm> {
                 value: dropdownValue,
                 icon: const Icon(Icons.arrow_downward),
                 elevation: 16,
-                onChanged: (String? value) {
-                  print(value);
+                onChanged: (var value) {
+                  // print(value);
                   // This is called when the user selects an item.
                   setState(() {
                     dropdownValue = value!;
@@ -209,12 +225,39 @@ class ProfileFormState extends State<ProfileForm> {
       ),
     );
   }
+
+
+  void updateProfile({
+    required String name,
+    required int age,
+    required int height,
+    required int weight,
+    required String gender,
+    required int cal}) async {
+    // shared preferences를 얻음
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    //값 저장하기
+    String strAge = age.toString();
+    String strHeight = height.toString();
+    String? strWeight = weight.toString();
+    String? strCal = cal.toString();
+    prefs.setString('name', name);
+    prefs.setString('age', strAge);
+    prefs.setString('height', strHeight);
+    prefs.setString('weight', strWeight);
+    prefs.setString('gender', gender);
+    prefs.setString('cal', strCal);
+
+    // testFunction();
+  }
+
 }
 
 UserProfile user = UserProfile(); //일단 객체 만들어 놓고
 
 class UserProfile {
-  String name = "";
+  String name="";
   int age = 0;
   int height = 0;
   int weight = 0;
@@ -222,11 +265,23 @@ class UserProfile {
   int cal = 0;
 }
 
-bool isInt(String? str) {
-  if (str == null) {
+
+bool isInt(var str) {
+  str = str.toString();
+  if(str == null) {
     return false;
   }
   return int.tryParse(str) != null;
 }
 
-void testFunction() async {}
+void testFunction() async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+  var testAge = prefs.getString('age');
+  var testName = prefs.getString('name');
+  var testGender = prefs.getString('gender');
+
+  print(testAge);
+  print(testName);
+  print(testGender);
+}
