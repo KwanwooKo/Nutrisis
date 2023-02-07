@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
 class Calendar extends StatefulWidget {
-  const Calendar({Key? key,
-    required this.history,
-    required this.changeTabTo,
-    required this.changeSelectedDate
-  }) : super(key: key);
+  const Calendar(
+      {Key? key,
+      required this.history,
+      required this.changeTabTo,
+      required this.changeSelectedDate})
+      : super(key: key);
   final Map<DateTime, Map<String, double>> history;
   final changeTabTo;
   final changeSelectedDate;
@@ -15,7 +16,6 @@ class Calendar extends StatefulWidget {
 }
 
 class _CalendarState extends State<Calendar> {
-
   DateTime datePicked = DateTime(
     DateTime.now().year,
     DateTime.now().month,
@@ -41,8 +41,7 @@ class _CalendarState extends State<Calendar> {
           ),
         ],
       );
-    }
-    else {
+    } else {
       return Text("No summary on ${datePicked.toString().split(' ')[0]} :(");
     }
   }
@@ -55,7 +54,7 @@ class _CalendarState extends State<Calendar> {
           initialDate: datePicked,
           firstDate: DateTime(2023, 01, 01),
           lastDate: DateTime(2023, 12, 31),
-          onDateChanged: (date){
+          onDateChanged: (date) {
             setState(() {
               datePicked = date;
             });
