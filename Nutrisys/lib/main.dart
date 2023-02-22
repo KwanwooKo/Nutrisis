@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import './charts.dart';
 import './profile.dart';
 import './home.dart';
 import './calendar.dart';
@@ -10,40 +9,31 @@ import './nutritionInfo.dart';
 
 void main() {
   runApp(
-    ChangeNotifierProvider (
-      create: (context) => Profile(),
-      child: MaterialApp(
-        initialRoute: '/',
-        home: MyApp(),
+      ChangeNotifierProvider (
+          create: (context) => Profile(),
+          child: MaterialApp(
+            debugShowCheckedModeBanner: false, // 화면 좌측 상단에 DEBUG 스티커 없애줌
+            initialRoute: '/',
+            home: MyApp(),
+          )
       )
-    )
   );
 }
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
-
   @override
   State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
-  var tap = 0;
+  int tab = 0;
 
-
-  Map<DateTime, Map<String, double>> history = {
-    DateTime(2023, 1, 23) : {
-      "탄수화물": 12,
-      "단백질": 5,
-      "지방": 6,
-      "기타": 3,
-    },
-    DateTime(2023, 1, 24) : {
-      "탄수화물": 13,
-      "단백질": 8,
-      "지방": 7,
-      "기타": 4,
-    },
+  Map<DateTime, NutritionInfo> nutritionHistory = {
+    DateTime(2023, 2, 04) : NutritionInfo(12.2, 421.2, 123.4, 52.12, 2102.5),
+    DateTime(2023, 2, 05) : NutritionInfo(23.2, 222.2, 323.4, 322.12, 4102.5),
+    DateTime(2023, 2, 06) : NutritionInfo(3.2, 2.2, 0.4, 122.12, 4.5),
+    DateTime(2023, 2, 07) : NutritionInfo(13123.1, 2.2, 323.4, 322.12, 410205.9),
   };
 
   DateTime selectedDate = DateTime(
@@ -59,9 +49,9 @@ class _MyAppState extends State<MyApp> {
   }
 
   // 고관우: setState 를 이용해서 tap 변경
-  clickTap(var index) {
+  void clickTap(var index) {
     setState(() {
-      tap = index;
+      tab = index;
     });
   }
 
@@ -69,9 +59,9 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     var pages = [
-      Home(history: history, selectedDate: selectedDate, changeSelectedDate: changeSelectedDate,),
-      Calendar(history : history, changeTabTo : clickTap, changeSelectedDate : changeSelectedDate),
-      AddNew(history: history)
+      Home(nutritionHistory: nutritionHistory, selectedDate: selectedDate, changeSelectedDate: changeSelectedDate,),
+      Calendar(nutritionHistory : nutritionHistory, changeTabTo : clickTap, changeSelectedDate : changeSelectedDate),
+      AddNew(nutritionHistory: nutritionHistory)
     ];
 
     return Scaffold(
@@ -79,17 +69,17 @@ class _MyAppState extends State<MyApp> {
         title: const Text('NutriSys',), centerTitle: false,
         actions: [
           IconButton(
-            onPressed: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context) => const Settings()));
-            },
-            icon: const Icon(Icons.settings)
+              onPressed: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const Settings()));
+              },
+              icon: const Icon(Icons.settings)
           ),
         ],
       ),
-      body: pages[tap],
+      body: pages[tab],
       bottomNavigationBar: BottomNavigationBar(
         // 고관우: currentIndex 이용해주니까 이거 focus 가 바뀌네
-        currentIndex: tap,
+        currentIndex: tab,
         // 고관우: index 를 이용해서 tap 을 띄워 => setState 필요
         onTap: (index) { clickTap(index); },
         items: const [
@@ -102,4 +92,3 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
-

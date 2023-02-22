@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 
+import 'nutritionInfo.dart';
+
 class Calendar extends StatefulWidget {
   const Calendar(
       {Key? key,
-      required this.history,
+      required this.nutritionHistory,
       required this.changeTabTo,
       required this.changeSelectedDate})
       : super(key: key);
-  final Map<DateTime, Map<String, double>> history;
+  final Map<DateTime, NutritionInfo> nutritionHistory;
   final changeTabTo;
   final changeSelectedDate;
 
@@ -23,8 +25,8 @@ class _CalendarState extends State<Calendar> {
   );
 
   Widget getSummary() {
-    if (widget.history.containsKey(datePicked)) {
-      Map<String, double>? mapData = widget.history[datePicked];
+    if (widget.nutritionHistory.containsKey(datePicked)) {
+      Map<String, double> mapData = widget.nutritionHistory[datePicked]?.nutritionMap?? {"shibal" : 1};
       return Column(
         children: [
           Text("Summary of ${datePicked.toString().split(' ')[0]}:\n"),
