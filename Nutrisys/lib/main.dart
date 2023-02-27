@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nutrisys/setProfile.dart';
 import 'package:provider/provider.dart';
 import './profile.dart';
 import './home.dart';
@@ -9,11 +10,13 @@ import './nutritionInfo.dart';
 
 void main() {
   runApp(
+
       ChangeNotifierProvider (
           create: (context) => Profile(),
           child: MaterialApp(
             debugShowCheckedModeBanner: false, // 화면 좌측 상단에 DEBUG 스티커 없애줌
             initialRoute: '/',
+            // home: ProfileForm(),
             home: MyApp(),
           )
       )
