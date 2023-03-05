@@ -35,70 +35,74 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        // main table
-        Container(
-          padding: const EdgeInsets.all(10),
-          // child: Center(child: Text('${context.read<Profile>().name}님의 오늘의 섭취량'),),
-          // 어차피 아래에 Date 띄울거니까 얘 필요 없을듯
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white54,
+        border: Border.all(
+            color: Colors.cyanAccent
         ),
-        // 날짜 표시
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+        borderRadius: BorderRadius.all(Radius.circular(10)),
+      ),
+      child: Column(
+          // mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            IconButton( // 왼쪽 화살표
-              onPressed: (){
-                widget.changeSelectedDate(
-                    widget.selectedDate.subtract(Duration(days: 1))
-                );
-              },
-              icon: Icon(Icons.keyboard_arrow_left),
-              iconSize: 30,
-            ),
-            Column(
+            // 날짜랑 화살표
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  child: Center(child: Text('Date: ${widget.selectedDate.toString().split(' ')[0]}'),),
+                IconButton( // 왼쪽 화살표
+                  onPressed: (){
+                    widget.changeSelectedDate(
+                        widget.selectedDate.subtract(Duration(days: 1))
+                    );
+                  },
+                  icon: Icon(Icons.keyboard_arrow_left),
+                  iconSize: 50,
                 ),
-                // 열량 표시
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  child: Center(
-                    child: Text('열량: ${widget.nutritionHistory[widget.selectedDate]?.calorie} cal / ${context.read<Profile>().goalCalorie}'),
-                  ),
+                Column(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      child: Center(child: Text(widget.selectedDate.toString().split(' ')[0]),),
+                    ),
+                    // 열량 표시
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      child: Center(
+                        child: Text('열량: ${widget.nutritionHistory[widget.selectedDate]?.calorie} cal / ${context.read<Profile>().goalCalorie}'),
+                      ),
+                    ),
+                  ],
+                ),
+                IconButton( // 오른쪽 화살표
+                  // 현재 보고 있는 날이 오늘이면 다음날로 못 넘어감
+                  onPressed: widget.selectedDate == DateTime(
+                      DateTime.now().year, DateTime.now().month, DateTime.now().day
+                  ) ? null : (){
+                    widget.changeSelectedDate(
+                        widget.selectedDate.add(Duration(days: 1))
+                    );
+                  },
+                  icon: Icon(Icons.keyboard_arrow_right),
+                  iconSize: 50,
                 ),
               ],
             ),
-            IconButton( // 오른쪽 화살표
-              // 현재 보고 있는 날이 오늘이면 다음날로 못 넘어감
-              onPressed: widget.selectedDate == DateTime(
-                  DateTime.now().year, DateTime.now().month, DateTime.now().day
-              ) ? null : (){
-                widget.changeSelectedDate(
-                    widget.selectedDate.add(Duration(days: 1))
-                );
-              },
-              icon: Icon(Icons.keyboard_arrow_right),
-              iconSize: 30,
+            // 차트 그리기
+            Container(
+              padding: const EdgeInsets.all(10),
+              child: Center(child: getChart()),
             ),
+            // 자세히 보기 버튼
+            Container(
+              alignment: Alignment.topRight,
+              child: TextButton(
+                  onPressed: () {  },
+                  child: const Text('자세히 보기'),
+              ),
+            )
           ],
-        ),
-        // 차트 그리기
-        Container(
-          padding: const EdgeInsets.all(10),
-          child: Center(child: getChart()),
-        ),
-        // 자세히 보기 버튼
-        Container(
-          alignment: Alignment.bottomRight,
-          child: TextButton(
-              onPressed: () {  },
-              child: const Text('자세히 보기')
-          ),
-        )
-      ],
+      ),
     );
   }
 }

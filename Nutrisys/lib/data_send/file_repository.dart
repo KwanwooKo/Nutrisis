@@ -1,6 +1,5 @@
 import 'dart:typed_data';
-
-import './fileapi.dart';
+import './file_api.dart';
 
 class FileRepository {
   final _api = FileApi();
