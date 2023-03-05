@@ -8,7 +8,7 @@ class BookMark extends StatefulWidget {
 
 class _BookMarkState extends State<BookMark> {
 
-  List<String> bookmark = ["새우깡", "김치찌개", "짜파구리", "호박", "고구마", "호박고구마"];
+  List<String> bookmark = ["새우깡", "김치찌개", "짜파구리", "호박", "고구마", "호박고구마", ];
 
   @override
   Widget build(BuildContext context) {

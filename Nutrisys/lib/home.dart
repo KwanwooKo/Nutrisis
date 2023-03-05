@@ -36,6 +36,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Column(
+      // mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         // main table
         Container(
@@ -60,7 +61,7 @@ class _HomeState extends State<Home> {
               children: [
                 Container(
                   padding: const EdgeInsets.all(10),
-                  child: Center(child: Text('Date: ${widget.selectedDate.toString().split(' ')[0]}'),),
+                  child: Center(child: Text(widget.selectedDate.toString().split(' ')[0]),),
                 ),
                 // 열량 표시
                 Container(
