@@ -18,7 +18,7 @@ class ProfileFormState extends State<ProfileForm> {
   @override
   Widget build(BuildContext context) {
     //주석추가
-    return Container(
+    return Material(
       // padding: EdgeInsets.symmetric(horizontal: 8),
       child: Form(
         key: _formKey,
@@ -33,7 +33,9 @@ class ProfileFormState extends State<ProfileForm> {
                 if (val.isEmpty) {
                   return '입력해주세요';
                 }
-                user.name = val;
+                setState(() {
+                  user.name = val;
+                });
                 return null;
               },
             ),
@@ -46,13 +48,16 @@ class ProfileFormState extends State<ProfileForm> {
                 if (val.isEmpty || isInt(val) == false) {
                   return '숫자를 입력해주세요';
                 }
-                user.age = int.tryParse(val)!;
+                setState(() {
+                  user.age = int.tryParse(val)!;
+                });
+                // user.age = int.tryParse(val)!;
                 return null;
               },
             ),
 
 
-            renderDropdownBox(),
+            RenderDropdownBox(),
 
             renderTextFormField(
               label: '키',
@@ -62,8 +67,9 @@ class ProfileFormState extends State<ProfileForm> {
                 if (val.isEmpty || isInt(val) == false) {
                   return '숫자를 입력해주세요';
                 }
-
-                user.height = int.tryParse(val)!;
+                setState(() {
+                  user.height = int.tryParse(val)!;
+                });
                 return null;
               },
             ),
@@ -76,8 +82,9 @@ class ProfileFormState extends State<ProfileForm> {
                 if (val.isEmpty || isInt(val) == false) {
                   return '숫자를 입력해주세요';
                 }
-
-                user.weight = int.tryParse(val)!;
+                setState(() {
+                  user.weight = int.tryParse(val)!;
+                });
                 return null;
               },
             ),
@@ -90,8 +97,9 @@ class ProfileFormState extends State<ProfileForm> {
                 if (val.isEmpty || isInt(val) == false) {
                   return '숫자를 입력해주세요';
                 }
-
-                user.cal = int.tryParse(val)!;
+                setState(() {
+                  user.cal = int.tryParse(val)!;
+                });
                 return null;
               },
             ),
@@ -182,51 +190,6 @@ class ProfileFormState extends State<ProfileForm> {
     );
   }
 
-  renderDropdownBox() {
-    const List<String> list = <String>['선택해주세요', 'Male', 'Female'];
-    String dropdownValue = list[0];
-
-    return Container(
-      padding: EdgeInsets.only(top: 20, bottom: 10, right: 10, left: 10),
-      child: Column(
-        children: [
-          Row(
-
-            children: [
-              Text(
-                "성별",
-                style: TextStyle(
-                  fontSize: 12.0,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              DropdownButton<String>(
-                value: dropdownValue,
-                icon: const Icon(Icons.arrow_downward),
-                elevation: 16,
-                onChanged: (var value) {
-                  // print(value);
-                  // This is called when the user selects an item.
-                  setState(() {
-                    dropdownValue = value!;
-                    user.gender = value;
-                  });
-                },
-                items: list.map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-
   void updateProfile({
     required String name,
     required int age,
@@ -284,4 +247,58 @@ void testFunction() async {
   print(testAge);
   print(testName);
   print(testGender);
+}
+
+
+// 성별 클래스
+class RenderDropdownBox extends StatefulWidget {
+  const RenderDropdownBox({Key? key}) : super(key: key);
+
+  @override
+  State<RenderDropdownBox> createState() => _RenderDropdownBoxState();
+}
+
+class _RenderDropdownBoxState extends State<RenderDropdownBox> {
+  List<String> list = <String>['선택해주세요', 'Male', 'Female'];
+  String dropdownValue = "선택해주세요";
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.only(top: 20, bottom: 10, right: 10, left: 10),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Text(
+                "성별",
+                style: TextStyle(
+                  fontSize: 12.0,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              DropdownButton<String>(
+                value: dropdownValue,
+                icon: const Icon(Icons.arrow_downward),
+                elevation: 16,
+                onChanged: (var value) {
+                  // This is called when the user selects an item.
+                  setState(() {
+                    dropdownValue = value!;
+                    user.gender = value;
+                  });
+                },
+                items: list.map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
 }

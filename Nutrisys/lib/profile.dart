@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Profile extends ChangeNotifier {
+
   var name = "";
   var age = "";
   var gender = "";
   var height = "";
   var weight = "";
   var goalCalorie = "";
-
   // 이거 input 을 어떻게 받지? => Json 으로? 아니면 Text 에 입력시켜서 그 내용을 받아와서?
   updateProfile({
       name, age, height, weight, gender, cal
