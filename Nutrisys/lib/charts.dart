@@ -37,24 +37,26 @@ class _CaloriePieChart extends State<CaloriePieChart> {
   @override
   Widget build(BuildContext context) {
     return PieChart(
-          dataMap: widget.calorieDataMap,
-          colorList: colorList,
-          chartRadius: MediaQuery.of(context).size.width / 2,
-          centerText: "Calorie",
-          ringStrokeWidth: 24,
-          animationDuration: const Duration(seconds: 2),
-          chartValuesOptions: const ChartValuesOptions(
-              showChartValues: true,
-              showChartValuesOutside: true,
-              showChartValuesInPercentage: true,
-              showChartValueBackground: false),
-          legendOptions: const LegendOptions(
-              showLegends: true,
-              legendShape: BoxShape.rectangle,
-              legendTextStyle: TextStyle(fontSize: 15),
-              legendPosition: LegendPosition.bottom,
-              showLegendsInRow: true),
-          gradientList: gradientList,
+      dataMap: widget.calorieDataMap,
+      colorList: colorList,
+      chartRadius: MediaQuery.of(context).size.width / 2,
+      // totalValue: ,
+      centerText: "Calorie",
+      ringStrokeWidth: 24,
+      animationDuration: const Duration(seconds: 2),
+      chartValuesOptions: const ChartValuesOptions(
+          showChartValues: true,
+          showChartValuesOutside: true,
+          showChartValuesInPercentage: true,
+          showChartValueBackground: false),
+      legendOptions: const LegendOptions(
+          showLegends: true,
+          legendShape: BoxShape.circle, // 동그라미
+          legendTextStyle: TextStyle(fontSize: 15),
+          legendPosition: LegendPosition.bottom,
+          showLegendsInRow: true,
+      ),
+      gradientList: gradientList,
     );
   }
 }

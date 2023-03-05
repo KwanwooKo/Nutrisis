@@ -12,17 +12,26 @@ class _BookMarkState extends State<BookMark> {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Colors.white70,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: bookmark.length,
-        itemBuilder: (context, index) {
-          return SizedBox(
-            width: 150,
-            child: Text("Item ${bookmark[index]}"),
-          );
-        },
+    return Container(
+      decoration: BoxDecoration(
+          color: Colors.white54,
+          border: Border.all(
+              color: Colors.cyanAccent
+          ),
+          borderRadius: BorderRadius.all(Radius.circular(10))
+      ),
+      child: Material(
+        color: Colors.white70,
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: bookmark.length,
+          itemBuilder: (context, index) {
+            return SizedBox(
+              width: 150,
+              child: Text("Item ${bookmark[index]}"),
+            );
+          },
+        ),
       ),
     );
   }

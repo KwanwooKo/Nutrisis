@@ -16,8 +16,16 @@ void main() {
             initialRoute: '/',
             home: MyApp(),
             theme: ThemeData(
-              primarySwatch: Colors.cyan, // **** TODO: 얘가 메인 컬러
-              // backgroundColor: Colors.cyanAccent,
+              scaffoldBackgroundColor: Colors.white, // 공백 색
+              primarySwatch: Colors.cyan, // **** 얘가 메인 컬러
+              appBarTheme: AppBarTheme(
+                foregroundColor: Colors.black87, // app bar 글씨 색
+              ),
+              elevatedButtonTheme: ElevatedButtonThemeData(
+                style: ButtonStyle(
+                    foregroundColor: MaterialStateProperty.all<Color>(Colors.white) // 네모 버튼 글자 색
+                ),
+              ),
             ),
           )
       )
