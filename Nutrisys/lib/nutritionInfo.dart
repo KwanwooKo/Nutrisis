@@ -3,14 +3,10 @@ class NutritionInfo {
   double _calorie = 0.0;
   Map<String, double> _nutritionMap = {"none": 0};
 
-  NutritionInfo(double carbohydrate, double protein, double fat, double etc, double calorie) {
+  NutritionInfo(double calorie, Map<String, double> info)
+  {
     _calorie = calorie;
-    _nutritionMap = {
-      "탄수화물": carbohydrate,
-      "단백질": protein,
-      "지방": fat,
-      "기타": etc,
-    };
+    _nutritionMap = info;
   }
 
   Map<String, double> get nutritionMap => _nutritionMap;
