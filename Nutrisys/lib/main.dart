@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:nutrisys/setProfile.dart';
 import 'package:provider/provider.dart';
 import './profile.dart';
 import './home.dart';
@@ -7,10 +6,15 @@ import './calendar.dart';
 import './addNew.dart';
 import './settings.dart';
 import './nutritionInfo.dart';
+import 'firebase_options.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(
-
       ChangeNotifierProvider (
           create: (context) => Profile(),
           child: MaterialApp(
@@ -84,19 +88,19 @@ class _MyAppState extends State<MyApp> {
       appBar: AppBar(
         title: const Text('NutriSys',),
         centerTitle: true,
-        toolbarHeight: 75,
+        toolbarHeight: 65,
         actions: [
           IconButton(
               onPressed: (){
                 Navigator.push(context, MaterialPageRoute(builder: (context) => const Settings()));
               },
-              icon: const Icon(Icons.settings),
+              icon: const Icon(Icons.person),
           ),
         ],
       ),
       body: pages[tab],
       bottomNavigationBar: SizedBox(
-        height: 75,
+        height: 90,
         child: BottomNavigationBar(
           // 고관우: currentIndex 이용해주니까 이거 focus 가 바뀌네
           currentIndex: tab,

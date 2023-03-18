@@ -2,14 +2,14 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'nutritionInfo.dart';
-import 'nutritions.dart';
+import 'Nutritions.dart';
 import 'package:localstore/localstore.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ManualForm extends StatelessWidget {
-  ManualForm({Key? key, required this.history}) : super(key: key);
-  final Map<DateTime, NutritionInfo> history;
-
+  ManualForm({Key? key, this.history}) : super(key: key);
+  final history;
   final formKey = GlobalKey<FormState>();
 
   String food_name = '';
@@ -142,6 +142,7 @@ class ManualForm extends StatelessWidget {
       // color: Colors.blue,
 
       onPressed: () async {
+        getData();
         formKey.currentState!.save();
         var _nutritions = new Nutritions(
             food_name: food_name,
@@ -203,5 +204,21 @@ class ManualForm extends StatelessWidget {
   void get_info(final _db, String cur_date) {
     final data = _db.collection(cur_date).get();
     data.then((result) => print(result));
+  }
+
+  void getData() {
+    final db = FirebaseFirestore.instance;
+    final table = db.collection("nutri");
+
+    var tmp = table.doc('1');
+    tmp.get().then((DocumentSnapshot doc) {
+      final data = doc.data() as Map<String, dynamic>;
+      print(data["대표식품명"]);
+      print(data["나트륨(mg)"]);
+      print(data["당류(g)"]);
+      print(data["에너지(kcal)"]);
+      // null data에 대해 test.
+      print(data["수분(g)"]);
+    });
   }
 }
