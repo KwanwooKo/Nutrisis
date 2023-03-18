@@ -1,14 +1,16 @@
+// import 'dart:html';
 import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:nutrisys/nutritionInfo.dart';
 
 class FileApi {
   final _dio = Dio();
 
   // image 를 byte로 바꿔서 전송
   Future<Response> uploadImage(
-      Uint8List image,
-      ) async {
+    Uint8List image,
+  ) async {
     // 보낼 파일을 비동기처리로 전송
     final formData = FormData.fromMap({
       'file': MultipartFile.fromBytes(image, filename: 'sendImage'),
@@ -16,7 +18,7 @@ class FileApi {
 
     // 서버 ip를 적어줘야 함
     final response = await _dio.post(
-      'http://34.64.218.41:5000',
+      'http://a7e4-35-204-167-156.ngrok.io',
       data: formData,
     );
     return response;
@@ -24,24 +26,35 @@ class FileApi {
 
   // 이 메소드로 response에 있는 식품명 가져와서,
   // data라는 map을 가져올 수 있어 ! print는 테스트용 출력문.
-  void getData(Map<String, dynamic> response) {
+  NutritionInfo? getNutritionInfo(Map<String, dynamic>? response) {
+    if (response == null) return null;
+
     final db = FirebaseFirestore.instance;
-    final table = db.collection("nutri");
 
-    // response에 식품명을 어떤식으로 저장했는지 몰라서, 일단 response의 input을 식품명으로 해놨음!
-    var name = response["식품명"];
-    var target = table.doc('name');
+    final table = db
+        .collection("nutri")
+        .where("식품명", isEqualTo: "라면_신라면")
+        .get()
+        .then((querySnapshot) {
+      var data = null;
 
-    target.get().then((DocumentSnapshot doc) {
-      final data = doc.data() as Map<String, dynamic>;
-      // nutrition history 에다가 저장?, nutritionInfo 에다가 저장
-      print(data["대표식품명"]);
-      print(data["나트륨"]);
-      print(data["당류"]);
-      print(data["에너지"]);
-      print(data["탄수화물"]);
-      // null data에 대해 test.
-      print(data["수분"]);
+      for (var docSnapshot in querySnapshot.docs) {
+        data = docSnapshot.data() as Map<String, dynamic>;
+        if (data != null && data["식품명"] == response["식품명"]) {
+          break;
+        }
+      }
+
+      Map<String, double> info = {
+        "탄수화물": data["탄수화물(g)"],
+        "단백질": data["단백질(g)"],
+        "지방": data["지방(g)"],
+      };
+
+      NutritionInfo res = NutritionInfo(data["에너지(kcal)"], info);
+      return res;
     });
+
+    return null;
   }
 }

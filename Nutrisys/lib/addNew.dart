@@ -3,8 +3,7 @@ import 'package:nutrisys/bookmark.dart';
 import 'package:nutrisys/manualForm.dart';
 import 'package:nutrisys/nutritionInfo.dart';
 import 'package:image_picker/image_picker.dart';
-import 'dart:io';
-import './data_send/view_model.dart';
+import 'confirmImage.dart';
 
 class AddNew extends StatefulWidget {
   const AddNew({Key? key, required this.nutritionHistory}) : super(key: key);
@@ -41,7 +40,7 @@ class _AddNewState extends State<AddNew> {
                         Navigator.push(context,
                             MaterialPageRoute(
                                 builder:
-                                    (context) => confirmNew(image, context)));
+                                    (context) => ConfirmImage(image: image, history: widget.nutritionHistory)));
                       }
                     },
                     icon: Icon(Icons.camera_alt_rounded),
@@ -63,7 +62,7 @@ class _AddNewState extends State<AddNew> {
                           Navigator.push(context,
                               MaterialPageRoute(
                                   builder:
-                                      (context) => confirmNew(image, context)));
+                                      (context) => ConfirmImage(image: image, history: widget.nutritionHistory)));
                         }
                       },
                       icon: Icon(Icons.image),
@@ -99,43 +98,4 @@ class _AddNewState extends State<AddNew> {
         ),
     );
   }
-
-  Widget confirmNew(XFile image, BuildContext context) {
-
-    final viewModel = MainViewModel();
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Confirm"),
-      ),
-      body: Container(
-        child: Image.file(File(image.path)),
-      ),
-      bottomNavigationBar: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          // 이걸로 파일 전송
-          ElevatedButton.icon(
-            onPressed: () async {
-              final bytes = await image.readAsBytes();
-              await viewModel.uploadImage(bytes.buffer.asUint8List());
-              Navigator.pop(context);
-            },
-            icon: Icon(Icons.add),
-            label: Text("Confirm"),
-          ),
-
-          ElevatedButton.icon(
-            onPressed: (){
-              Navigator.pop(context);
-            },
-            icon: Icon(Icons.cancel_outlined),
-            label: Text("Cancel"),
-          ),
-        ],
-      ),
-    );
-  }
-
-
 }
