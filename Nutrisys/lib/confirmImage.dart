@@ -65,12 +65,13 @@ class _ConfirmImageState extends State<ConfirmImage> {
         }
       }
 
-      Nutritions _nutritions = new Nutritions(
+      // 이거 data type 안 맞추면 에러난다
+      Nutritions _nutritions = Nutritions(
           food_name: data["식품명"],
           carbohydrate: data["탄수화물(g)"],
           protein: data["단백질(g)"],
           fat: data["지방(g)"],
-          natrium: data["나트륨(mg)"],
+          natrium: data["나트륨(mg)"].toDouble(),
           sugars: data["당류(g)"],
           cholesterol: data["콜레스테롤(mg)"]);
 
@@ -91,7 +92,6 @@ class _ConfirmImageState extends State<ConfirmImage> {
       // setState 신청
       setState(() {
         currentInfo = NutritionInfo(data["에너지(kcal)"].toDouble(), info);
-        print("이거 설정 언제 되니?");
       });
     });
   }
@@ -115,14 +115,12 @@ class _ConfirmImageState extends State<ConfirmImage> {
           // 이걸로 파일 전송
           ElevatedButton.icon(
             // confirm 버튼
-            onPressed: response == null || currentInfo == null
-                ? null
-                : () {
-                    setState(() {
-                      widget.history[DateTime.now()] = currentInfo!;
-                    });
-                    Navigator.pop(context);
-                  },
+            onPressed: response == null || currentInfo == null ? null : () {
+              setState(() {
+                widget.history[DateTime.now()] = currentInfo!;
+              });
+              Navigator.pop(context);
+            },
             icon: Icon(Icons.add),
             label: Text("Confirm"),
           ),

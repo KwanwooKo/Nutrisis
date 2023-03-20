@@ -48,9 +48,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   int tab = 0;
 
-  Map<DateTime, NutritionInfo> nutritionHistory = {
-
-  };
+  Map<DateTime, NutritionInfo> nutritionHistory = {};
 
   DateTime selectedDate = DateTime(
     DateTime.now().year,

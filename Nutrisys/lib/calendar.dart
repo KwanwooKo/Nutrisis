@@ -10,6 +10,8 @@ class Calendar extends StatefulWidget {
       required this.changeSelectedDate})
       : super(key: key);
   final Map<DateTime, NutritionInfo> nutritionHistory;
+  // final Map<DateTime, NutritionInfo> dateNutritionHistory;
+  // final NutritionInfo dateNutritionInfo;
   final changeTabTo;
   final changeSelectedDate;
 
@@ -25,9 +27,26 @@ class _CalendarState extends State<Calendar> {
   );
 
   Widget getSummary() {
-    if (widget.nutritionHistory.containsKey(datePicked)) {
-      Map<String, double> mapData =
-          widget.nutritionHistory[datePicked]?.nutritionMap ?? {"error": 0};
+
+    // 지금 문제 => DateTime이 너무 자세하게 잡혀서 정보가 나오질 않아
+    bool dataExistsFlag = false;
+
+    print("nutritionHistory: ${widget.nutritionHistory}");
+    Map<String, double> mapData = {
+      "탄수화물" : 0,
+      "단백질" : 0,
+      "지방" : 0
+    };
+    for (var iters in widget.nutritionHistory.keys) {
+      if (iters.year == datePicked.year && iters.month == datePicked.month && iters.day == datePicked.day) {
+        dataExistsFlag = true;
+        mapData["탄수화물"] = mapData["탄수화물"]! + widget.nutritionHistory[iters]!.nutritionMap["탄수화물"]!;
+        mapData["단백질"] = mapData["단백질"]! + widget.nutritionHistory[iters]!.nutritionMap["단백질"]!;
+        mapData["지방"] = mapData["지방"]! + widget.nutritionHistory[iters]!.nutritionMap["지방"]!;
+      }
+    }
+    // 현재 문제: pixel overflow 발생
+    if (dataExistsFlag) {
       return Container(
         width: double.infinity,
         // height: double.infinity,
@@ -44,10 +63,10 @@ class _CalendarState extends State<Calendar> {
                 "Summary of ${datePicked.toString().split(' ')[0]}:\n",
                 style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
               ),
-              Text("탄수화물: ${mapData!["탄수화물"]}"),
+              Text("탄수화물: ${mapData["탄수화물"]}"),
               Text("지방: ${mapData["지방"]}"),
               Text("단백질: ${mapData["단백질"]}"),
-              Text("기타: ${mapData["기타"]}"),
+              // Text("기타: ${mapData["기타"]}"),
               Align(
                 alignment: Alignment.bottomRight,
                 child: ElevatedButton(

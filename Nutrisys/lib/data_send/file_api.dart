@@ -19,7 +19,7 @@ class FileApi {
 
     // 서버 ip를 적어줘야 함
     final response = await _dio.post(
-      'http://c075-35-222-31-210.ngrok.io/',
+      'http://91ed-34-143-167-37.ngrok.io',
       data: formData,
     );
     return response;
