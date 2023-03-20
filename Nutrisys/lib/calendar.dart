@@ -26,23 +26,22 @@ class _CalendarState extends State<Calendar> {
 
   Widget getSummary() {
     if (widget.nutritionHistory.containsKey(datePicked)) {
-      Map<String, double> mapData = widget.nutritionHistory[datePicked]?.nutritionMap?? {"error": 0};
+      Map<String, double> mapData =
+          widget.nutritionHistory[datePicked]?.nutritionMap ?? {"error": 0};
       return Container(
         width: double.infinity,
         // height: double.infinity,
         decoration: BoxDecoration(
-          color: Colors.white54,
-          border: Border.all(
-              color: Colors.cyanAccent
-          ),
-          borderRadius: BorderRadius.all(Radius.circular(10))
-        ),
+            color: Colors.white54,
+            border: Border.all(color: Colors.cyanAccent),
+            borderRadius: BorderRadius.all(Radius.circular(10))),
         child: Padding(
           padding: const EdgeInsets.all(15),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Summary of ${datePicked.toString().split(' ')[0]}:\n",
+              Text(
+                "Summary of ${datePicked.toString().split(' ')[0]}:\n",
                 style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
               ),
               Text("탄수화물: ${mapData!["탄수화물"]}"),
@@ -83,12 +82,9 @@ class _CalendarState extends State<Calendar> {
           Container(
             // color: Colors.cyan,
             decoration: BoxDecoration(
-              color: Colors.white54,
-              border: Border.all(
-                color: Colors.cyanAccent
-              ),
-              borderRadius: BorderRadius.all(Radius.circular(10))
-            ),
+                color: Colors.white54,
+                border: Border.all(color: Colors.cyanAccent),
+                borderRadius: BorderRadius.all(Radius.circular(10))),
             // color: Colors.white,
             child: CalendarDatePicker(
               initialDate: datePicked,
@@ -102,7 +98,9 @@ class _CalendarState extends State<Calendar> {
             ),
           ),
           // Spacer(),
-          SizedBox(height: MediaQuery.of(context).size.height / 32,),
+          SizedBox(
+            height: MediaQuery.of(context).size.height / 32,
+          ),
           getSummary(),
         ],
       ),
