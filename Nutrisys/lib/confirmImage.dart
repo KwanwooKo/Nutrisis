@@ -75,7 +75,8 @@ class _ConfirmImageState extends State<ConfirmImage> {
           cholesterol: data["콜레스테롤(mg)"]);
 
       var now = DateTime.now();
-      var cur_date = now.day.toString();
+      var cur_date =
+          now.year.toString() + now.month.toString() + now.day.toString();
       var cur_time =
           now.hour.toString() + now.minute.toString() + now.second.toString();
 
