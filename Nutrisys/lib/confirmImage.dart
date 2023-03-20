@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:nutrisys/nutritionInfo.dart';
@@ -20,6 +21,7 @@ class ConfirmImage extends StatefulWidget {
 class _ConfirmImageState extends State<ConfirmImage> {
 
   FileApi api = FileApi();
+  NutritionInfo? currentInfo = null;
   Map<String, dynamic>? response = null;
 
   void loadData(var data)
@@ -41,16 +43,49 @@ class _ConfirmImageState extends State<ConfirmImage> {
     fetchData();
   }
 
+
+
+  // 이 메소드로 response에 있는 식품명 가져와서,
+  // data라는 map을 가져올 수 있어 ! print는 테스트용 출력문.
+  void setNutritionInfo(Map<String, dynamic>? response) {
+    if (currentInfo != null) return;
+    final db = FirebaseFirestore.instance;
+    final table = db.collection("nutri").where("식품명", isEqualTo: "라면_신라면").get();
+
+    table.then((querySnapshot) {
+      var data;
+
+      for (var docSnapshot in querySnapshot.docs) {
+        data = docSnapshot.data();
+        if (data != null && data["식품명"] == response?["식품명"]) {
+          break;
+        }
+      }
+
+      Map<String, double> info = {
+        "탄수화물": data["탄수화물(g)"],
+        "단백질": data["단백질(g)"],
+        "지방": data["지방(g)"],
+      };
+
+      // setState 신청
+      setState(() {
+        currentInfo = NutritionInfo(data["에너지(kcal)"].toDouble(), info);
+        print("이거 설정 언제 되니?");
+      });
+    });
+
+  }
+
   @override
   Widget build(BuildContext context) {
-
+    setNutritionInfo(response);
     return Scaffold(
       appBar: AppBar(
         title: Text("Confirm"),
       ),
       body: Column(
-        children:
-        [
+        children: [
           Image.file(File(widget.image.path)),
           response == null ? CircularProgressIndicator() : Text(response?["식품명"])
         ]
@@ -61,16 +96,10 @@ class _ConfirmImageState extends State<ConfirmImage> {
         children: [
           // 이걸로 파일 전송
           ElevatedButton.icon( // confirm 버튼
-            onPressed: response == null ? null : () {
-              NutritionInfo? info = api.getNutritionInfo(response);
-              if (info != null)
-              {
-                print("null은 아니고");
-                widget.history[DateTime.now()] = info;
-              }
-              else {
-               print("Gaeshibal nulllll");
-              }
+            onPressed: response == null || currentInfo == null ? null : () {
+              setState(() {
+                widget.history[DateTime.now()] = currentInfo!;
+              });
               Navigator.pop(context);
             },
             icon: Icon(Icons.add),
