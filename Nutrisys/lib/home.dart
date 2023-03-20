@@ -21,16 +21,42 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-
+  bool dataExistsFlag = false;
   // 정보가 없는 날에 대해서 빈 동그라미로 나타나는게 싫어서
   // 정보가 있으면 차트를 반환하고, 없으면 없다는 Text를 반환하는 함수 만들었음.
   Widget getChart() {
-    if (widget.nutritionHistory.containsKey(widget.selectedDate)) {
-      return CaloriePieChart( // 위에서 containsKey 체크했으니 SHiT은 안 뜰거임
-          calorieDataMap: widget.nutritionHistory[widget.selectedDate]?.nutritionMap??{"SHiT" : 1}
+    print("nutritionHistory: ${widget.nutritionHistory}");
+    Map<String, double> mapData = {
+      "탄수화물" : 0,
+      "단백질" : 0,
+      "지방" : 0
+    };
+    for (var iters in widget.nutritionHistory.keys) {
+      if (iters.year == widget.selectedDate.year && iters.month == widget.selectedDate.month && iters.day == widget.selectedDate.day) {
+        dataExistsFlag = true;
+        mapData["탄수화물"] = mapData["탄수화물"]! + widget.nutritionHistory[iters]!.nutritionMap["탄수화물"]!;
+        mapData["단백질"] = mapData["단백질"]! + widget.nutritionHistory[iters]!.nutritionMap["단백질"]!;
+        mapData["지방"] = mapData["지방"]! + widget.nutritionHistory[iters]!.nutritionMap["지방"]!;
+      }
+    }
+
+    if (dataExistsFlag) {
+      return CaloriePieChart(
+          calorieDataMap: mapData
       );
     }
     return Text("${widget.selectedDate.toString().split(' ')[0]}에 저장된 정보가 없습니다 :(");
+  }
+
+  double getCalorie() {
+    double calorie = 0.0;
+    for (var iters in widget.nutritionHistory.keys) {
+      if (iters.year == widget.selectedDate.year && iters.month == widget.selectedDate.month && iters.day == widget.selectedDate.day) {
+        dataExistsFlag = true;
+        calorie += widget.nutritionHistory[iters]!.calorie;
+      }
+    }
+    return calorie;
   }
 
   @override
@@ -69,7 +95,8 @@ class _HomeState extends State<Home> {
                     Container(
                       padding: const EdgeInsets.all(10),
                       child: Center(
-                        child: Text('열량: ${widget.nutritionHistory[widget.selectedDate]?.calorie} cal / ${context.read<Profile>().goalCalorie}'),
+                        // 이거 받아와서 처리해야돼
+                        child: Text('열량: ${getCalorie()} cal / ${context.read<Profile>().goalCalorie}'),
                       ),
                     ),
                   ],
