@@ -26,7 +26,7 @@ class Nutritions {
 
   Map<String, dynamic> toMap() {
     return {
-      'food_name': food_name,
+      '식품명': food_name,
       'carbohydrate': carbohydrate,
       'protein': protein,
       'fat': fat,
