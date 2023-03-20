@@ -58,6 +58,15 @@ class ManualForm extends StatelessWidget {
                 },
               ),
               renderTextFormField(
+                label: '지방',
+                onSaved: (val) {
+                  this.fat = double.parse(val);
+                },
+                validator: (val) {
+                  return null;
+                },
+              ),
+              renderTextFormField(
                 label: '나트륨',
                 onSaved: (val) {
                   this.natrium = double.parse(val);
@@ -84,13 +93,9 @@ class ManualForm extends StatelessWidget {
                   return null;
                 },
               ),
-              renderButton(),
-              // ElevatedButton(
-              //     // need to work for me.
-              //     // create method for onPressed.
-              //     onPressed: () async {},
-              //     child: Text("Add New")),
+              saveButton(),
               checkButton(),
+              deleteButton(),
             ],
           ),
         ),
@@ -127,9 +132,10 @@ class ManualForm extends StatelessWidget {
     );
   }
 
-  renderButton() {
+  saveButton() {
     var now = DateTime.now();
-    var cur_date = now.day.toString();
+    var cur_date =
+        now.year.toString() + now.month.toString() + now.day.toString();
 
     var cur_time =
         now.hour.toString() + now.minute.toString() + now.second.toString();
@@ -142,7 +148,7 @@ class ManualForm extends StatelessWidget {
       // color: Colors.blue,
 
       onPressed: () async {
-        getData();
+        // getData();
         formKey.currentState!.save();
         var _nutritions = new Nutritions(
             food_name: food_name,
@@ -153,17 +159,7 @@ class ManualForm extends StatelessWidget {
             sugars: this.sugars,
             cholesterol: this.cholesterol);
         if (this.formKey.currentState!.validate()) {
-          // ****** TODO
-          // ****** localStorage-save!!******
-
-          // 마지막 tab 참고!!!
           _nutritions.save(cur_date, cur_time);
-          // // validation 이 성공하면 true 가 리턴돼요!
-          // Get.snackbar(
-          //   '저장완료!',
-          //   '폼 저장이 완료되었습니다!',
-          //   backgroundColor: Colors.white,
-          // );
         }
       },
       child: Text(
@@ -177,12 +173,11 @@ class ManualForm extends StatelessWidget {
 
   checkButton() {
     var now = DateTime.now();
-    var cur_date = now.day.toString();
+    var cur_date =
+        now.year.toString() + now.month.toString() + now.day.toString();
 
     var cur_time =
         now.hour.toString() + now.minute.toString() + now.second.toString();
-
-    // final _foodinfo = <DateTime, Nutritions>{};
 
     final _db = Localstore.instance;
 
@@ -194,6 +189,25 @@ class ManualForm extends StatelessWidget {
       },
       child: Text(
         '정보보기!',
+        style: TextStyle(
+          color: Colors.white,
+        ),
+      ),
+    );
+  }
+
+  deleteButton() {
+    var now = DateTime.now();
+    var cur_date =
+        now.year.toString() + now.month.toString() + now.day.toString();
+
+    return ElevatedButton(
+      onPressed: () async {
+        // 두번째 파라미터(시간)은 임시 test용으로 써놓은 것.
+        delete(cur_date, "155410");
+      },
+      child: Text(
+        '삭제하기!',
         style: TextStyle(
           color: Colors.white,
         ),
@@ -220,5 +234,10 @@ class ManualForm extends StatelessWidget {
       // null data에 대해 test.
       print(data["수분(g)"]);
     });
+  }
+
+  void delete(String cur_date, String cur_time) async {
+    final db = Localstore.instance;
+    return db.collection(cur_date).doc(cur_time).delete();
   }
 }
