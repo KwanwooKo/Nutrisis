@@ -64,6 +64,7 @@ class _AddNewState extends State<AddNew> {
                                   builder:
                                       (context) => ConfirmImage(image: image, history: widget.nutritionHistory)));
                         }
+
                       },
                       icon: Icon(Icons.image),
                       label: Text("Gallery"),

@@ -48,12 +48,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   int tab = 0;
 
-  Map<DateTime, NutritionInfo> nutritionHistory = {
-    // DateTime(2023, 3, 02) : NutritionInfo(13123.1, 2.2, 323.4, 322.12, 410205.9),
-    // DateTime(2023, 3, 03) : NutritionInfo(3.2, 2.2, 0.4, 122.12, 4.5),
-    // DateTime(2023, 3, 04) : NutritionInfo(23.2, 222.2, 323.4, 322.12, 4102.5),
-    // DateTime(2023, 3, 05) : NutritionInfo(12.2, 421.2, 123.4, 52.12, 2102.5),
-  };
+  Map<DateTime, NutritionInfo> nutritionHistory = {};
 
   DateTime selectedDate = DateTime(
     DateTime.now().year,
