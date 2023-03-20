@@ -83,7 +83,7 @@ class _MyAppState extends State<MyApp> {
       appBar: AppBar(
         title: const Text('NutriSys',),
         centerTitle: true,
-        toolbarHeight: 65,
+        toolbarHeight: 60,
         actions: [
           IconButton(
               onPressed: (){
@@ -95,7 +95,7 @@ class _MyAppState extends State<MyApp> {
       ),
       body: pages[tab],
       bottomNavigationBar: SizedBox(
-        height: 90,
+        height: 70,
         child: BottomNavigationBar(
           // 고관우: currentIndex 이용해주니까 이거 focus 가 바뀌네
           currentIndex: tab,
