@@ -52,17 +52,18 @@ class Nutritions {
   }
 
   Future save(String cur_date, String cur_time) async {
+    // 이거 날짜로 저장해야될듯
     final db = Localstore.instance;
     print('local save success!!');
     // how to make a data_form?
     // 3/20 : 나중에 delete를 위해 Map 자체에도 시간 표시.(Map이 갖고있는 시간 이용해서
     // delete 함수 파라미터로 집어넣기 위함.)
-    return db.collection(cur_date).doc(cur_time).set(toMap(cur_date, cur_time));
+    return db.collection(cur_time).doc(cur_date).set(toMap(cur_time, cur_date));
   }
 
   // temporary parameters. may need to modify.
-  // Future delete(String cur_date, String cur_time) async {
-  //   final db = Localstore.instance;
-  //   return db.collection(cur_date).doc(cur_time).delete();
-  // }
+  Future delete(String cur_date, String cur_time) async {
+    final db = Localstore.instance;
+    return db.collection(cur_date).doc(cur_time).delete();
+  }
 }
