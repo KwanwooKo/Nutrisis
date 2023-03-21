@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:collection';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -185,7 +186,16 @@ class ManualForm extends StatelessWidget {
       // color: Colors.blue,
 
       onPressed: () async {
-        get_info(_db, cur_date);
+        // var list = await get_localInfoWithDate(_db, cur_date);
+        var list = await get_localInfoWithDate(_db, cur_date);
+        print("싀발거 성공 !!");
+        var i = 0;
+        print(247);
+        for (var n in list) {
+          print(i++);
+          print('\n');
+          print(n);
+        }
       },
       child: Text(
         '정보보기!',
@@ -204,6 +214,7 @@ class ManualForm extends StatelessWidget {
     return ElevatedButton(
       onPressed: () async {
         // 두번째 파라미터(시간)은 임시 test용으로 써놓은 것.
+        // 첫번째 파라미터도 임시. 삭제할 날짜를 지정해 주어야 함.
         delete(cur_date, "155410");
       },
       child: Text(
@@ -215,9 +226,24 @@ class ManualForm extends StatelessWidget {
     );
   }
 
-  void get_info(final _db, String cur_date) {
-    final data = _db.collection(cur_date).get();
-    data.then((result) => print(result));
+  List<Map<String, dynamic>> transform_to_list(LinkedHashMap res) {
+    List<Map<String, dynamic>> list = [];
+    res.forEach((key, value) {
+      list.add(value);
+    });
+    return list;
+  }
+
+  // 이 함수의 return을 받는 변수 선언할때, 함수 앞에 await 선언 해주어야 함.
+  // 함수 앞에 async 선언도 필요.
+  Future<List<Map<String, dynamic>>> get_localInfoWithDate(
+      final _db, String cur_date) async {
+    List<Map<String, dynamic>> list = [];
+    // data의 type : LinkedHashMap
+    // 252의 인자에 null이 들어가지 않도록, data는 await.
+    final data = await _db.collection(cur_date).get();
+
+    return transform_to_list(data);
   }
 
   void getData() {
